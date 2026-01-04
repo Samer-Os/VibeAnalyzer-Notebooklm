@@ -23,7 +23,7 @@ services:
     environment:
       DATABASE_URL: postgres://vibe_user:password@db:5432/vibe_development
       RAILS_ENV: development
-      ANTHROPIC_API_KEY: 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
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
     depends_on:
       - db
 
