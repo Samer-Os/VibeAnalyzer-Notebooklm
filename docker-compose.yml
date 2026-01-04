@@ -1,0 +1,31 @@
+version: "3.9"
+services:
+  db:
+    image: postgres:14
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: vibe_user
+      POSTGRES_DB: vibe_development
+    ports:
+      - "5432:5432"
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    volumes:
+      - ./backend:/rails
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgres://vibe_user:password@db:5432/vibe_development
+      RAILS_ENV: development
+      ANTHROPIC_API_KEY: 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
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:

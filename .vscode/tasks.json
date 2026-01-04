@@ -1,0 +1,49 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Start Backend (Docker)",
+      "type": "shell",
+      "command": "docker compose up",
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "custom",
+        "pattern": {
+          "regexp": "^.*Listening on tcp://.*$"
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "Attaching to",
+          "endsPattern": "Listening on"
+        }
+      },
+      "presentation": {
+        "group": "backend"
+      }
+    },
+    {
+      "label": "Setup Database",
+      "type": "shell",
+      "command": "docker compose run backend rails db:create db:migrate",
+      "presentation": {
+        "reveal": "always"
+      }
+    },
+    {
+      "label": "Start Frontend",
+      "type": "npm",
+      "script": "dev",
+      "path": "frontend",
+      "isBackground": true,
+      "problemMatcher": "$tsc-watch",
+      "presentation": {
+        "group": "frontend"
+      }
+    },
+    {
+      "label": "Run All",
+      "dependsOn": ["Start Backend (Docker)", "Start Frontend"],
+      "problemMatcher": []
+    }
+  ]
+}
